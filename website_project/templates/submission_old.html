@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+* {
+  box-sizing: border-box;
+}
+
+.column {
+  float: left;
+  width: 33.33%;
+  padding: 5px;
+}
+
+/* Clearfix (clear floats) */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+</style>
+</head>
+<body>
+
+<h2>Cloaking Result</h2>
+
+<div class="row">
+  <div class="column">
+      <h3>The original </h3>
+      <img src="{{ url_for('static', filename=original_image) }}" alt="Original" style="width:60%">
+  </div>
+  <div class="column">
+      <h3>Cloaked Image - Medium Privacy (>50% success) </h3>
+      <img src="{{ url_for('static', filename=a45_image) }}" alt="Medium Cloak" style="width:60%">
+  </div>
+  <div class="column">
+      <h3> Cloaked Image - High Privacy (>80% success) </h3>
+      <img src="{{ url_for('static', filename=a20_image) }}" alt="High Cloak" style="width:60%">
+  </div>
+</div>
+
+</body>
+</html>

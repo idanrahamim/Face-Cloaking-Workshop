@@ -1,0 +1,8 @@
+Flask==2.1.2
+matplotlib==3.3.3
+Pillow==7.2.0
+torch==1.7.1
+torchvision==0.8.2
+facenet-pytorch==2.5.2
+waitress==2.1.2
+APScheduler # if doens't work install separately from cmd with premissions.

@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+<style>
+    body{
+        background-image: url("{{ url_for('static', filename='br2.jpg') }}");
+        height: 100%;
+        background-position: 20% 20% ;
+        background-repeat: no-repeat;
+        background-size: cover;
+        text-align: center
+    }
+* {
+  box-sizing: border-box;
+}
+
+.column {
+  float: left;
+  width: 33.33%;
+  padding: 5px;
+}
+
+/* Clearfix (clear floats) */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+.fonts{
+            color: #7c795d;
+            font-family: 'Trocchi', serif;
+            font-size: 30px;
+            font-weight: normal;
+        }
+</style>
+</head>
+<body>
+<h2 style="color: #7c795d; font-family: 'Trocchi', serif; font-size: 45px; font-weight: normal;">Cloaking Result</h2>
+<div class="row">
+  <div class="column">
+      <h3 class="fonts">Original Image </h3>
+      <img src="{{ url_for('static', filename=original_image) }}" alt="Original" style="width:60%">
+          <form method="post" action="{{ url_for('download') }}"  enctype="multipart/form-data">
+              <p><br>
+            <input type="submit" name ="download_original.{{ url_for('static', filename=original_image) }}" value="Download" class="btn btn-info" >
+              </p>
+      </form>
+
+  </div>
+  <div class="column">
+      <h3 class="fonts">Medium Privacy - 50% success</h3>
+      <img src="{{ url_for('static', filename=a45_image) }}" alt="Medium Cloak" style="width:60%">
+      <form method="post" action="{{ url_for('download') }}"  enctype="multipart/form-data">
+              <p><br>
+            <input type="submit" name ="download_fifty.{{ url_for('static', filename=a45_image) }}" value="Download" class="btn btn-info" >
+              </p>
+      </form>
+  </div>
+  <div class="column">
+      <h3 class="fonts">High Privacy - 80% success</h3>
+      <img src="{{ url_for('static', filename=a20_image) }}" alt="High Cloak" style="width:60%">
+      <form method="post" action="{{ url_for('download') }}"  enctype="multipart/form-data">
+              <p><br>
+            <input type="submit" name ="download_eighty.{{ url_for('static', filename=a20_image) }}" value="Download" class="btn btn-info" >
+              </p>
+      </form>
+  </div>
+</div>
+</body>
+</html>
