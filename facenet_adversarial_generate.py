@@ -123,6 +123,7 @@ def gpm_evaluate_algorithm(input_images: datasets.ImageFolder,
     return success_counter / len(input_images)
 
 
+
 def parameters_experiment():
     """
         this function is for parameter experiment where we test performance of many different combinations.
