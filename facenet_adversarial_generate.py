@@ -15,7 +15,7 @@ if os.path.exists(output_directory):
 os.mkdir(output_directory)
 
 face_detector = MTCNN(image_size=240, margin=0, min_face_size=20)
-face_embedding = InceptionResnetV1(pretrained='vggface2').eval().cuda()
+face_embedding = InceptionResnetV1(pretrained='vggface2').eval()
 face_embedding_vgg = InceptionResnetV1(pretrained='vggface2').eval()
 face_embedding_casia = InceptionResnetV1(pretrained='casia-webface').eval()
 
@@ -47,11 +47,6 @@ def ulixes_loss(x_new, x_orig, the_original_input=None, the_pertubation=None, fa
 
 def pertubation_loss_1(p):
     return (p ** 2).sum()
-
-
-# RGB
-def pertuabation_loss_RGB(p, rgb_hist=[1., 1., 1.]):
-    pass
 
 
 def execute_attack(input_image, out_dir):
@@ -104,7 +99,7 @@ def execute_attack(input_image, out_dir):
 
 
 def evaluate_algorithm(input_images: datasets.ImageFolder,
-                       fr_system: face_recognition_vggface2.FaceRecognitionSystem):
+                       fr_system: face_recognition_system.FaceRecognitionSystem):
     success_counter = 0
     idx_to_class = {v: k for k, v in input_images.class_to_idx.items()}
     for batch_num, (xs, ys) in enumerate(input_images):
@@ -117,7 +112,7 @@ def evaluate_algorithm(input_images: datasets.ImageFolder,
 
 
 def gpm_evaluate_algorithm(input_images: datasets.ImageFolder,
-                           fr_system: face_recognition_vggface2.FaceRecognitionSystem):
+                           fr_system: face_recognition_system.FaceRecognitionSystem):
     success_counter = 0
     idx_to_class = {v: k for k, v in input_images.class_to_idx.items()}
     for batch_num, (xs, ys) in enumerate(input_images):
@@ -128,13 +123,10 @@ def gpm_evaluate_algorithm(input_images: datasets.ImageFolder,
     return success_counter / len(input_images)
 
 
-
-
-
 def parameters_experiment():
-    """ 
-        this function is for parameter experiment where we test performance of many different combinations. 
-        This function is used to generate the results we present in the report. 
+    """
+        this function is for parameter experiment where we test performance of many different combinations.
+        This function is used to generate the results we present in the report.
     """
 
     users_images = datasets.ImageFolder('./IN')
@@ -145,7 +137,7 @@ def parameters_experiment():
 
         for gym_size in [500]:
             face_recognition_users_images_folder = f'./GYM_{gym_size}'
-            face_recognition_system = face_recognition_vggface2.create_face_recognition_system(
+            face_recognition_sys = face_recognition_system.create_face_recognition_system(
                 users_images_folder=face_recognition_users_images_folder,
                 pretrained_on='vggface2'
             )
@@ -176,8 +168,8 @@ def parameters_experiment():
 
                                 cloaked_images = datasets.ImageFolder(output_directory)
 
-                                acc_fake = 1. - evaluate_algorithm(cloaked_images, face_recognition_system)
-                                acc_real = 1. - evaluate_algorithm(users_images, face_recognition_system)
+                                acc_fake = 1. - evaluate_algorithm(cloaked_images, face_recognition_sys)
+                                acc_real = 1. - evaluate_algorithm(users_images, face_recognition_sys)
                                 out_report_file.write(
                                     f"\n{gym_size},{attack_loss_name},{wb},{amplification},{iterations},{epsilon},{alpha},{acc_fake},{acc_real},{e - s}")
                                 out_report_file.flush()
@@ -186,8 +178,6 @@ def parameters_experiment():
                                 # # os.rename('./OUT_FOR_RESULTS/Abradley_cooper', f'./OUT_FOR_RESULTS/')
                                 # shutil.copytree('./out/Nick_Frost', f'./OUT_FOR_RESULTS/Nick_Frost_{a}')
                                 # # os.rename('./OUT_FOR_RESULTS/Nick_Frost', f'./OUT_FOR_RESULTS/Nick_Frost_{a}')
-
-
 
 
 def simple_run():
@@ -207,18 +197,18 @@ def simple_run():
         if fn not in face_recognition_users_images_folder_names:
             raise Exception("input user (for perturbation) is not in the face recognition users")
 
-    # initialize the face recognition system - this part takes massive amount lot of time. 
+    # initialize the face recognition system - this part takes massive amount lot of time.
     # decrease the size of the GYM_MEMBERS folder to reduce it.
-    face_recognition_system = face_recognition_vggface2.create_face_recognition_system(
+    face_recognition_sys = face_recognition_system.create_face_recognition_system(
         users_images_folder=face_recognition_users_images_folder,
         pretrained_on='vggface2'
     )
     cloaked_images = datasets.ImageFolder(output_directory)
 
     print(f"FACE RECOGNITION SUCCESS RATE ON FAKE IMAGES IS: "
-          f"{1. - evaluate_algorithm(cloaked_images, face_recognition_system)}")
+          f"{1. - evaluate_algorithm(cloaked_images, face_recognition_sys)}")
     print(f"FACE RECOGNITION SUCCESS RATE ON REAL IMAGES IS: "
-          f"{1. - evaluate_algorithm(users_images, face_recognition_system)}")
+          f"{1. - evaluate_algorithm(users_images, face_recognition_sys)}")
 
 
 if __name__ == '__main__':
