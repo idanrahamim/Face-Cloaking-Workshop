@@ -1,7 +1,6 @@
 import facenet_adversarial_generate
-import sys
 import sqlite3
-from flask import Flask, flash, request, redirect, url_for, render_template, send_file
+from flask import Flask, flash, request, redirect, render_template, send_file
 import os
 from werkzeug.utils import secure_filename
 from waitress import serve
@@ -58,17 +57,15 @@ def upload_image():
                    + secure_filename(file.filename)
         fp = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(fp)
-        # print('upload_image filename: ' + filename)
         original_fp, faceoff_fp, ulixes_fp = apply_adversarial_example(fp)
         return render_template("/submission.html", original_image=original_fp, a45_image=faceoff_fp, a20_image=ulixes_fp)
-        # return redirect(url_for('static', filename=new_filename), code=301)
     else:
         flash('Allowed image types are - png, jpg, jpeg, gif')
         return redirect(request.url)
 
 
 @app.route('/download', methods=['POST'])
-def download():
+def download():  # sends to the user the pic he wish to download
     for key in request.form:
         if key.startswith('download'):
             privacy_lvl, dot, path = key.partition('.')
@@ -89,8 +86,8 @@ def db_update_func():  # updates db for download button statistics
             for key in statistic_dic:
                 statistic_dic[key] = 0
 
-            for row in cursor.execute("select * from statistic"):
-                print(row)
+            #for row in cursor.execute("select * from statistic"):
+            #   print(row)
 
 
 def txt_update_func():  # updates txt file for download button statistics

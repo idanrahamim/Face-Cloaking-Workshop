@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Trocchi&display=swap');
 
 body {
-    background-image: url("br2.jpg");
+    background-image: url("bg_img.jpg");
     font-family: 'Trocchi', serif;
     /*color: #7c795d;*/
     background-size: cover;
@@ -43,6 +43,10 @@ input {
 
 img {
     max-width: 60%;
+}
+
+li {
+    color : red;
 }
 
 #loading-box {

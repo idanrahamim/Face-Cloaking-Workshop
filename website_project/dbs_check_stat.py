@@ -10,4 +10,3 @@ for i in range(3):
     print(cols[i][0], ":", stats[i])
 
 connection.close()
-
