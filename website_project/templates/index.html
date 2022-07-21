@@ -22,6 +22,17 @@
 <div class="container">
     <h1>Face Cloaking</h1>
     <h2>Select an image to cloak</h2>
+    <p>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul>
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+    </p>
 
     <form method="post" action="/" enctype="multipart/form-data">
         <input id="file" type="file" name="file" class="form-control" required>

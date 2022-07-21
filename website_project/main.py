@@ -57,14 +57,12 @@ def upload_image():
         fp = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(fp)
         # print('upload_image filename: ' + filename)
-        flash('Image successfully uploaded and displayed below')
         original_fp, faceoff_fp, ulixes_fp = apply_adversarial_example(fp)
         return render_template("/submission.html", original_image=original_fp, a45_image=faceoff_fp, a20_image=ulixes_fp)
         # return redirect(url_for('static', filename=new_filename), code=301)
     else:
         flash('Allowed image types are - png, jpg, jpeg, gif')
         return redirect(request.url)
-
 
 
 @app.route('/download', methods=['POST'])
@@ -75,7 +73,7 @@ def download():
             path = path[1:]
             privacy_lvl = privacy_lvl.split("_")[1]
             statistic_dic[privacy_lvl] += 1
-    return send_file(path, as_attachment=True)
+            return send_file(path, as_attachment=True)
 
 
 def db_update_func():  # updates db for download button statistics
