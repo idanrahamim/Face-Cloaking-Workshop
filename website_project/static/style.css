@@ -1,7 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Trocchi&display=swap');
 
-
-
 body {
     background-image: url("br2.jpg");
     font-family: 'Trocchi', serif;
@@ -49,7 +47,7 @@ img {
 
 #loading-box {
     display: none;
-    padding: 100px;
+    padding: 30px;
     margin: 0 auto;
 
 }
@@ -67,7 +65,7 @@ img {
     animation: spin 2s linear infinite;
     position: center;
     margin: 0 auto;
-    padding: 100px;
+    padding: 50px;
 }
 
 @-webkit-keyframes spin {
