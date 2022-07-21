@@ -58,12 +58,12 @@ def execute_attack(input_image, out_dir):
     os.mkdir(output_mid)
     shutil.copy2(input_image, './MYWORKINGDIR/INPUT_IMAGE')
 
-    # 45% correct recognition rate
+    # 50% correct recognition rate
 
     users_images = datasets.ImageFolder('./MYWORKINGDIR')
     attack = attacks.PGD(face_embedding_vgg, ulixes_loss,
                          hp={'epsilon': 0.03, 'steps': 10, 'alpha': 0.005},
-                         face_detector=face_detector, amplification=4.5)
+                         face_detector=face_detector, amplification=4.2)
     attack.test_attack(users_images,
                        device=device,
                        output_dir=output_mid)
