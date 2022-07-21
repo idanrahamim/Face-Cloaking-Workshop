@@ -7,6 +7,7 @@ from werkzeug.utils import secure_filename
 from waitress import serve
 from apscheduler.schedulers.background import BackgroundScheduler
 from hashlib import md5
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -39,6 +40,7 @@ def allowed_file(filename):
 
 @app.route('/')
 def home():
+    print(datetime.now().replace(microsecond=0), "Client IP:", request.remote_addr, )
     return render_template('/index.html')
 
 
