@@ -1,6 +1,6 @@
 import facenet_adversarial_generate
 import sqlite3
-from flask import Flask, flash, request, redirect, render_template, send_file
+from flask import Flask, flash, request, redirect, render_template, send_file, abort
 import os
 from werkzeug.utils import secure_filename
 from waitress import serve
@@ -67,12 +67,14 @@ def upload_image():
 @app.route('/download', methods=['POST'])
 def download():  # sends to the user the pic he wish to download
     for key in request.form:
-        if key.startswith('download'):
+        if key.startswith('download_original./static/./users_adversarial_examples/'):
             privacy_lvl, dot, path = key.partition('.')
             path = path[1:]
             privacy_lvl = privacy_lvl.split("_")[1]
             statistic_dic[privacy_lvl] += 1
             return send_file(path, as_attachment=True)
+        else:
+            abort(404)
 
 
 def db_update_func():  # updates db for download button statistics
