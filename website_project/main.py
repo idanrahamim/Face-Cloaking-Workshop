@@ -1,6 +1,6 @@
 import facenet_adversarial_generate
 import sqlite3
-from flask import Flask, flash, request, redirect, render_template, send_file, abort
+from flask import Flask, flash, request, redirect, render_template, abort, send_from_directory
 import os
 from werkzeug.utils import secure_filename
 from waitress import serve
@@ -9,12 +9,10 @@ from hashlib import md5
 from datetime import datetime
 
 app = Flask(__name__)
-
-UPLOAD_FOLDER = './users_uploaded_images/'
-RES_FOLDER = './static/users_adversarial_examples/'
-
-app.secret_key = "secret key"
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+SECRET_KEY = os.urandom(12).hex()
+app.secret_key = SECRET_KEY
+app.config['RES_FOLDER'] = './static/users_adversarial_examples/'
+app.config['UPLOAD_FOLDER'] = './users_uploaded_images/'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
@@ -24,13 +22,13 @@ statistic_dic = {'original': 0, 'fifty': 0, 'eighty': 0}
 
 def apply_adversarial_example(fp):
     from PIL import Image
-    new_path_orig, new_path_faceoff, new_path_ulixes = facenet_adversarial_generate.execute_attack(fp, RES_FOLDER)
+    new_path_orig, new_path_ulixes_50, new_path_ulixes_20 = facenet_adversarial_generate.execute_attack(fp, app.config['RES_FOLDER'])
     # a = Image.open(fp)
     # a = a.convert("1")
     # new_path = fp.replace(UPLOAD_FOLDER, RES_FOLDER)
     # a.save(new_path)
-    return new_path_orig.replace('static/', ''), new_path_faceoff.replace('static/', ''), \
-           new_path_ulixes.replace('static/', '')
+    return new_path_orig.replace('./static/', ''), new_path_ulixes_50.replace('./static/', ''), \
+           new_path_ulixes_20.replace('./static/', '')
 
 
 def allowed_file(filename):
@@ -39,7 +37,7 @@ def allowed_file(filename):
 
 @app.route('/')
 def home():
-    print(datetime.now().replace(microsecond=0), "Client IP:", request.remote_addr, )
+    print(f'[{datetime.now().replace(microsecond=0)}]', "Client IP:", request.remote_addr)
     return render_template('/index.html')
 
 
@@ -67,13 +65,18 @@ def upload_image():
 @app.route('/download', methods=['POST'])
 def download():  # sends to the user the pic he wish to download
     for key in request.form:
-        if key.startswith('download_original./static/./users_adversarial_examples/'):
+        try:
             privacy_lvl, dot, path = key.partition('.')
-            path = path[1:]
+            path = path[1:].replace('static/users_adversarial_examples/', '')
             privacy_lvl = privacy_lvl.split("_")[1]
             statistic_dic[privacy_lvl] += 1
-            return send_file(path, as_attachment=True)
-        else:
+            user_ip = str(request.remote_addr)
+            if md5(user_ip.encode('utf-8')).hexdigest() in path:
+                print(f'[{datetime.now().replace(microsecond=0)}]', "Client IP:", user_ip, "Request download:", privacy_lvl)
+                return send_from_directory(app.config['RES_FOLDER'], path, as_attachment=True)
+            else:
+                abort(404)
+        except:
             abort(404)
 
 

@@ -67,7 +67,7 @@ def execute_attack(input_image, out_dir):
     attack.test_attack(users_images,
                        device=device,
                        output_dir=output_mid)
-    new_path = os.path.join(output_mid, '45_' + os.path.basename(input_image))
+    new_path = os.path.join(output_mid, '50_' + os.path.basename(input_image))
     os.rename(os.path.join(output_mid, 'INPUT_IMAGE', '0.png'), new_path)
     shutil.copy2(new_path, out_dir)
 
@@ -93,7 +93,7 @@ def execute_attack(input_image, out_dir):
         os.remove(to_original_path)
     os.rename(input_image, to_original_path)
 
-    return os.path.join(out_dir, os.path.basename(new_path).replace('45', 'original')), \
+    return os.path.join(out_dir, os.path.basename(new_path).replace('50', 'original')), \
            os.path.join(out_dir, os.path.basename(new_path)), \
            os.path.join(out_dir, os.path.basename(new_ulixes_path))
 
