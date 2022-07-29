@@ -50,7 +50,6 @@ li {
 }
 
 #loading-box {
-    display: none;
     padding: 30px;
     margin: 0 auto;
 
@@ -61,6 +60,7 @@ li {
     border: 16px solid #f3f3f3;
     border-radius: 50%;
     border-top: 16px solid blue;
+    border-left: 16px solid black;
     border-right: 16px solid green;
     border-bottom: 16px solid red;
     width: 120px;
