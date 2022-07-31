@@ -58,7 +58,7 @@ def execute_attack(input_image, out_dir, first_amp=4.2, second_amp=6.):
     os.mkdir(output_mid)
     shutil.copy2(input_image, './MYWORKINGDIR/INPUT_IMAGE')
 
-    # 50% correct recognition rate
+    # First correct recognition rate
 
     users_images = datasets.ImageFolder('./MYWORKINGDIR')
     attack = attacks.PGD(face_embedding_vgg, ulixes_loss,
@@ -67,11 +67,11 @@ def execute_attack(input_image, out_dir, first_amp=4.2, second_amp=6.):
     attack.test_attack(users_images,
                        device=device,
                        output_dir=output_mid)
-    new_path = os.path.join(output_mid, '50_' + os.path.basename(input_image))
+    new_path = os.path.join(output_mid, 'first_' + os.path.basename(input_image))
     os.rename(os.path.join(output_mid, 'INPUT_IMAGE', '0.png'), new_path)
     shutil.copy2(new_path, out_dir)
 
-    # 20% correct recognition rate
+    # Second correct recognition rate
 
     shutil.rmtree(output_mid)
     os.mkdir(output_mid)
@@ -84,7 +84,7 @@ def execute_attack(input_image, out_dir, first_amp=4.2, second_amp=6.):
                        device=device,
                        output_dir=output_mid)
 
-    new_ulixes_path = os.path.join(output_mid, '20_' + os.path.basename(input_image))
+    new_ulixes_path = os.path.join(output_mid, 'second_' + os.path.basename(input_image))
     os.rename(os.path.join(output_mid, 'INPUT_IMAGE', '0.png'), new_ulixes_path)
     shutil.copy2(new_ulixes_path, out_dir)
 
@@ -93,7 +93,7 @@ def execute_attack(input_image, out_dir, first_amp=4.2, second_amp=6.):
         os.remove(to_original_path)
     os.rename(input_image, to_original_path)
 
-    return os.path.join(out_dir, os.path.basename(new_path).replace('50', 'original')), \
+    return os.path.join(out_dir, os.path.basename(new_path).replace('first', 'original')), \
            os.path.join(out_dir, os.path.basename(new_path)), \
            os.path.join(out_dir, os.path.basename(new_ulixes_path))
 

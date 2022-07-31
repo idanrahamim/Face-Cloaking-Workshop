@@ -18,18 +18,19 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 statistic_dic = {'original': 0, 'fifty': 0, 'eighty': 0}
+privacy_lvl_to_success_percent = {'Low': '20%', 'Medium': '50%', 'High': '80%'}
 privacy_lvl_to_amplification = {'Low': 3.2, 'Medium': 4.2, 'High': 6.}
 
 
 def apply_adversarial_example(fp, first_amp, second_amp):
     from PIL import Image
-    new_path_orig, new_path_ulixes_50, new_path_ulixes_20 = facenet_adversarial_generate.execute_attack(fp, app.config['RES_FOLDER'], first_amp, second_amp)
+    new_path_orig, new_path_ulixes_first, new_path_ulixes_second = facenet_adversarial_generate.execute_attack(fp, app.config['RES_FOLDER'], first_amp, second_amp)
     # a = Image.open(fp)
     # a = a.convert("1")
     # new_path = fp.replace(UPLOAD_FOLDER, RES_FOLDER)
     # a.save(new_path)
-    return new_path_orig.replace('./static/', ''), new_path_ulixes_50.replace('./static/', ''), \
-           new_path_ulixes_20.replace('./static/', '')
+    return new_path_orig.replace('./static/', ''), new_path_ulixes_first.replace('./static/', ''), \
+           new_path_ulixes_second.replace('./static/', '')
 
 
 def allowed_file(filename):
@@ -58,8 +59,13 @@ def upload_image():
                    + secure_filename(file.filename)
         fp = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(fp)
-        original_fp, faceoff_fp, ulixes_fp = apply_adversarial_example(fp, privacy_lvl_to_amplification[first_privacy_lvl], privacy_lvl_to_amplification[second_privacy_lvl])
-        return render_template("/submission.html", original_image=original_fp, a45_image=faceoff_fp, a20_image=ulixes_fp, first_privacy_lvl= first_privacy_lvl, second_privacy_lvl=second_privacy_lvl)
+        original_fp, first_ulixes_fp, second_ulixes_fp = apply_adversarial_example(fp,
+            privacy_lvl_to_amplification[first_privacy_lvl], privacy_lvl_to_amplification[second_privacy_lvl])
+        return render_template("/submission.html", original_image=original_fp, a45_image=first_ulixes_fp,
+                               a20_image=second_ulixes_fp,
+                               first_privacy_lvl=first_privacy_lvl, second_privacy_lvl=second_privacy_lvl,
+                               first_success_percent=privacy_lvl_to_success_percent[first_privacy_lvl],
+                               second_success_percent=privacy_lvl_to_success_percent[second_privacy_lvl])
     else:
         flash('Allowed image types are - png, jpg, jpeg, gif')
         return redirect(request.url)

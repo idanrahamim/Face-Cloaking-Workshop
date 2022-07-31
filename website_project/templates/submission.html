@@ -24,7 +24,7 @@
     </div>
 
     <div class="col-lg mb-5">
-        <h3>{{ first_privacy_lvl }} Medium Privacy - 50% success</h3>
+        <h3>{{ first_privacy_lvl }} Privacy - {{first_success_percent}} success</h3>
         <img src="{{ url_for('static', filename=a45_image) }}" alt="Medium Cloak">
         <form method="post" action="{{ url_for('download') }}" enctype="multipart/form-data">
             <input type="submit" name="download_fifty.{{ url_for('static', filename=a45_image) }}" value="Download"
@@ -33,7 +33,7 @@
     </div>
 
     <div class="col-lg mb-5">
-        <h3>{{ second_privacy_lvl }} High Privacy - 80% success</h3>
+        <h3>{{ second_privacy_lvl }} Privacy - {{second_success_percent}} success</h3>
         <img src="{{ url_for('static', filename=a20_image) }}" alt="High Cloak">
         <form method="post" action="{{ url_for('download') }}" enctype="multipart/form-data">
             <input type="submit" name="download_eighty.{{ url_for('static', filename=a20_image) }}" value="Download"
