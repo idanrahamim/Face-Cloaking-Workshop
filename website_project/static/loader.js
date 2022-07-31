@@ -6,8 +6,10 @@ function init() {
             document.querySelector("#inputPrivacy2").value){
 
             event.preventDefault();
-            document.querySelector("h2").insertAdjacentHTML('afterend',
+            if (!document.querySelector("#dpl")){
+                document.querySelector("h2").insertAdjacentHTML('afterend',
                 `<ul><li id="dpl">Select different privacy levels</li></ul>`);
+            }
         }
         else if (document.querySelector("#file").value !== ""){
             const dpl = document.querySelector("#dpl");
