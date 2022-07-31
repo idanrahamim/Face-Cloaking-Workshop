@@ -1,3 +1,4 @@
-original,0
-fifty,0
-eighty,0
+Original,0
+Low,0
+Medium,0
+High,0

@@ -17,7 +17,7 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
-statistic_dic = {'original': 0, 'fifty': 0, 'eighty': 0}
+statistic_dic = {'Original': 0, 'Low': 0, 'Medium': 0, 'High': 0}
 privacy_lvl_to_success_percent = {'Low': '20%', 'Medium': '50%', 'High': '80%'}
 privacy_lvl_to_amplification = {'Low': 3.2, 'Medium': 4.2, 'High': 6.}
 
@@ -45,12 +45,21 @@ def home():
 
 @app.route('/', methods=['POST'])
 def upload_image():
+    if 'first_privacy' not in request.form or 'second_privacy' not in request.form:
+        flash('Privacy level missed')
+        return redirect(request.url)
+    first_privacy_lvl = request.form['first_privacy'].split(" ", 1)[0]
+    second_privacy_lvl = request.form['second_privacy'].split(" ", 1)[0]
+    if first_privacy_lvl not in ['Low', 'Medium', 'High'] or second_privacy_lvl not in ['Low', 'Medium', 'High']:
+        flash('Wrong privacy level')
+        return redirect(request.url)
+    if first_privacy_lvl == second_privacy_lvl:
+        flash('Select different privacy levels')
+        return redirect(request.url)
     if 'file' not in request.files:
         flash('No file part')
         return redirect(request.url)
     file = request.files['file']
-    first_privacy_lvl = request.form['first_privacy'].split(" ", 1)[0]
-    second_privacy_lvl = request.form['second_privacy'].split(" ", 1)[0]
     if file.filename == '':
         flash('No image selected for uploading')
         return redirect(request.url)
@@ -94,8 +103,9 @@ def db_update_func():  # updates db for download button statistics
         if val != 0:
             connection = sqlite3.connect("./statistic.db")
             cursor = connection.cursor()
-            cursor.execute(f"update statistic set original = original+{statistic_dic['original']},"
-                           f" fifty = fifty +{statistic_dic['fifty']}, eighty = eighty + {statistic_dic['eighty']}")
+            cursor.execute(f"update statistic set original = original+{statistic_dic['Original']},"
+                           f" Low = Low+{statistic_dic['Low']}, Medium = Medium+{statistic_dic['Medium']},"
+                           f" High = High+ {statistic_dic['High']}")
             connection.commit()
             for key in statistic_dic:
                 statistic_dic[key] = 0
