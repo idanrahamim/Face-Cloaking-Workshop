@@ -49,7 +49,7 @@ def pertubation_loss_1(p):
     return (p ** 2).sum()
 
 
-def execute_attack(input_image, out_dir):
+def execute_attack(input_image, out_dir, first_amp=4.2, second_amp=6.):
     if os.path.exists('./MYWORKINGDIR'):
         shutil.rmtree('./MYWORKINGDIR')
     os.mkdir('./MYWORKINGDIR')
@@ -63,7 +63,7 @@ def execute_attack(input_image, out_dir):
     users_images = datasets.ImageFolder('./MYWORKINGDIR')
     attack = attacks.PGD(face_embedding_vgg, ulixes_loss,
                          hp={'epsilon': 0.03, 'steps': 10, 'alpha': 0.005},
-                         face_detector=face_detector, amplification=4.2)
+                         face_detector=face_detector, amplification=first_amp)
     attack.test_attack(users_images,
                        device=device,
                        output_dir=output_mid)
@@ -78,7 +78,7 @@ def execute_attack(input_image, out_dir):
 
     attack = attacks.PGD(face_embedding_vgg, ulixes_loss,
                          hp={'epsilon': 0.03, 'steps': 10, 'alpha': 0.005},
-                         face_detector=face_detector, amplification=6.)
+                         face_detector=face_detector, amplification=second_amp)
 
     attack.test_attack(users_images,
                        device=device,

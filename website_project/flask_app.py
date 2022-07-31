@@ -18,11 +18,12 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 statistic_dic = {'original': 0, 'fifty': 0, 'eighty': 0}
+privacy_lvl_to_amplification = {'Low': 3.2, 'Medium': 4.2, 'High': 6.}
 
 
-def apply_adversarial_example(fp):
+def apply_adversarial_example(fp, first_amp, second_amp):
     from PIL import Image
-    new_path_orig, new_path_ulixes_50, new_path_ulixes_20 = facenet_adversarial_generate.execute_attack(fp, app.config['RES_FOLDER'])
+    new_path_orig, new_path_ulixes_50, new_path_ulixes_20 = facenet_adversarial_generate.execute_attack(fp, app.config['RES_FOLDER'], first_amp, second_amp)
     # a = Image.open(fp)
     # a = a.convert("1")
     # new_path = fp.replace(UPLOAD_FOLDER, RES_FOLDER)
@@ -47,6 +48,8 @@ def upload_image():
         flash('No file part')
         return redirect(request.url)
     file = request.files['file']
+    first_privacy_lvl = request.form['first_privacy'].split(" ", 1)[0]
+    second_privacy_lvl = request.form['second_privacy'].split(" ", 1)[0]
     if file.filename == '':
         flash('No image selected for uploading')
         return redirect(request.url)
@@ -55,7 +58,7 @@ def upload_image():
                    + secure_filename(file.filename)
         fp = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(fp)
-        original_fp, faceoff_fp, ulixes_fp = apply_adversarial_example(fp)
+        original_fp, faceoff_fp, ulixes_fp = apply_adversarial_example(fp, privacy_lvl_to_amplification[first_privacy_lvl], privacy_lvl_to_amplification[second_privacy_lvl])
         return render_template("/submission.html", original_image=original_fp, a45_image=faceoff_fp, a20_image=ulixes_fp)
     else:
         flash('Allowed image types are - png, jpg, jpeg, gif')
