@@ -1,9 +1,18 @@
 function init() {
     const btn = document.querySelector("#btn");
 
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", (event) => {
+        if (document.querySelector("#inputPrivacy1").value ===
+            document.querySelector("#inputPrivacy2").value){
 
-        if (document.querySelector("#file").value !== ""){
+            event.preventDefault();
+            document.querySelector("h2").insertAdjacentHTML('afterend',
+                `<ul><li id="dpl">Select different privacy levels</li></ul>`);
+        }
+        else if (document.querySelector("#file").value !== ""){
+            const dpl = document.querySelector("#dpl");
+            if (dpl){dpl.remove();}
+
             document.querySelector(".container").insertAdjacentHTML('beforeend',
                 `<div id="loading-box">
                 <div class="loading"></div>
