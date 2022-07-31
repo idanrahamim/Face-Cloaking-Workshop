@@ -59,7 +59,7 @@ def upload_image():
         fp = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(fp)
         original_fp, faceoff_fp, ulixes_fp = apply_adversarial_example(fp, privacy_lvl_to_amplification[first_privacy_lvl], privacy_lvl_to_amplification[second_privacy_lvl])
-        return render_template("/submission.html", original_image=original_fp, a45_image=faceoff_fp, a20_image=ulixes_fp)
+        return render_template("/submission.html", original_image=original_fp, a45_image=faceoff_fp, a20_image=ulixes_fp, first_privacy_lvl= first_privacy_lvl, second_privacy_lvl=second_privacy_lvl)
     else:
         flash('Allowed image types are - png, jpg, jpeg, gif')
         return redirect(request.url)
