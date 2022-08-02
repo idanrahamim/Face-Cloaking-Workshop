@@ -14,7 +14,7 @@
 <body class="index-bg">
 <div class="container">
     <h1>Face Cloaking</h1>
-    <h2>Select an image to cloak</h2>
+    <h2 id="title2">Select an image to cloak</h2>
 
     {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -27,7 +27,7 @@
     {% endwith %}
 
     <form method="post" action="/" enctype="multipart/form-data">
-        <input id="file" type="file" name="file" class="form-control mb-4" required>
+        <input id="file" type="file" name="file" accept=".png,.jpg,.jpeg,.gif" class="form-control mb-4" required>
         <h3> Select two privacy levels </h3>
 
         <div class="row justify-content-evenly">
