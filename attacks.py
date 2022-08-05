@@ -6,10 +6,13 @@ transform = T.ToPILImage()
 
 
 class Attack:
-    def __init__(self, net, loss_fn, face_detector=None, amplification=2.):
+    def __init__(self, net, loss_fn, face_detector=None, amplification: float = 2.):
         """
-        :param net: the network to attack
-        :param loss_fn: the attack is with respect to this loss
+        :param net: the network to apply the attack according to (example: facenet).
+        :param loss_fn: the attack is with respect to this loss (defines faceoff or ulixes).
+        :param face_detector: the network that is used to extract faces out of the input image (example: MTCNN).
+                              Can be a multiple face detector
+        :param amplification: the amplification factor
         """
         self.net = net
         self.loss_fn = loss_fn
@@ -18,17 +21,18 @@ class Attack:
         self.amplification = amplification
 
     def perturb(self, X, y, device=None):
-        """ generates adversarial examples to inputs (X, y) """
+        """ generates adversarial examples to inputs (X, y).
+            This function should be override by inherited classes.
+        """
         pass
 
     def test_attack(self, dataloader,
-                    device=None, amplification=2., output_dir='./out'):
+                    device=None, output_dir='./out'):
         """
-        the attack score of attack method A on network <net> is E[A(x) != y] over distribution D when A(x) is the
-        constructed adversarial example of attack A on x. We are going to estimate it using samples from test_dataset.
-
-        :param plot_results: plot original vs adv imgs with additional information
-        :return: the accuracy on constructed adversarial examples (i.e. 1 - attack score).
+        This function is responsible to generate the adversarial pertuabtions
+        :param dataloader: the input images as a pytorch Dataloader.
+        :param device: either cuda or cpu device.
+        :param output_dir: the adversarial examples output directory (the images with pertubations).
         """
         idx_to_class = {v: k for k, v in dataloader.class_to_idx.items()}
 
@@ -66,15 +70,26 @@ class Attack:
 
 
 class PGD(Attack):
-    def __init__(self, net, loss_fn, hp, face_detector=None, amplification=2.):
+    """
+    This class implements the PGD attack according to the specifications defined in Attack class.
+    """
+
+    def __init__(self, net, loss_fn, parameters: dict, face_detector=None, amplification=2.):
+        """
+        :param parameters: the set of parameters. Given as a dictionary.
+        """
         super().__init__(net, loss_fn, face_detector, amplification)
-        self.steps = hp["steps"]
-        self.alpha = hp["alpha"]
-        self.epsilon = hp["epsilon"]
+        self.steps = parameters["steps"]
+        self.alpha = parameters["alpha"]
+        self.epsilon = parameters["epsilon"]
         self.name = "pgd"
 
     def perturb(self, X, y, device=None):
-        """ generates adversarial examples to given data points and labels (X, y) based on PGD approach. """
+        """
+        generates adversarial examples to given data points and labels (X, y) based on PGD approach.
+        This function is a general PGD and not related specifically for face recognition.
+        """
+
         original_X = X.clone()
         for i in range(self.steps):
             X.requires_grad_()

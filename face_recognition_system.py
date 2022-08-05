@@ -1,5 +1,5 @@
 """
-Face detection evaluation based on facenet with sample from VGGFcce2
+Face detection evaluation based on facenet with sample from VGGFcce2.
 """
 
 from facenet_pytorch import MTCNN, InceptionResnetV1
@@ -15,7 +15,24 @@ import numpy as np
 
 
 class FaceRecognitionSystem:
-    def __init__(self, face_detector, face_embedding, users_images_folder):
+    """
+    This class mimics a face recognition system as explained in the report.
+    We use this class mostly for testing and evaluation of the different attacks.
+    """
+
+    def __init__(self, face_detector, face_embedding, users_images_folder: str):
+        """
+        :param face_detector: The face detection network (example: MTCNN). We assume is a one-face detector.
+        :param face_embedding: The embedding network (example: facenet)
+        :param users_images_folder: a path of the input images folder (the 'users' images folders)
+
+        At this function we apply the face detection and embedding and save them for
+        each of the users.
+
+        As for our experience, this class is massive memory consumer. We recommend on regular PC (<=32GB RAM)
+        to not exceed 500 users.
+        """
+
         self.face_detector = face_detector
         self.face_embedding = face_embedding  # THE DISTINGUISHER
 
@@ -40,10 +57,14 @@ class FaceRecognitionSystem:
                 self.users[idx] = None
             i += 1
 
-    def get_invalid_users(self):
-        return [user for user in self.users if self.users[user] is not None]
-
     def recognize_by_image(self, img, similarity_threshold=None, ret_order_of_users=False):
+        """
+        This function is the main functionality of this class
+        :param img:
+        :param similarity_threshold:
+        :param ret_order_of_users:
+        :return:
+        """
         if isinstance(img, str):
             img = Image.open(img)
         face, prob = self.face_detector(img, return_prob=True)
@@ -71,6 +92,10 @@ class FaceRecognitionSystem:
 
 
 def create_face_recognition_system(users_images_folder='./GYM_MEMBERS', pretrained_on='vggface2'):
+    """
+    A function to create a face recognition system with default parameters.
+    """
+
     face_recognition_system = FaceRecognitionSystem(
         face_detector=MTCNN(image_size=240, margin=0, min_face_size=20),
         face_embedding=InceptionResnetV1(pretrained=pretrained_on).eval(),
