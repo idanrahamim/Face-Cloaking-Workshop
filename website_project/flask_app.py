@@ -1,6 +1,6 @@
 import facenet_adversarial_generate
 import sqlite3
-from flask import Flask, flash, request, redirect, render_template, abort, send_from_directory
+from flask import Flask, flash, request, redirect, render_template
 import os
 from werkzeug.utils import secure_filename
 from waitress import serve
@@ -23,14 +23,9 @@ privacy_lvl_to_amplification = {'Low': 3.2, 'Medium': 4.2, 'High': 6.}
 
 
 def apply_adversarial_example(fp, first_amp, second_amp):
-    from PIL import Image
-    new_path_orig, new_path_ulixes_first, new_path_ulixes_second = facenet_adversarial_generate.execute_attack(fp, app.config['RES_FOLDER'], first_amp, second_amp)
-    # a = Image.open(fp)
-    # a = a.convert("1")
-    # new_path = fp.replace(UPLOAD_FOLDER, RES_FOLDER)
-    # a.save(new_path)
-    return new_path_orig.replace('./static/', ''), new_path_ulixes_first.replace('./static/', ''), \
-           new_path_ulixes_second.replace('./static/', '')
+    new_path_orig, new_path_ulixes_first, new_path_ulixes_second =\
+        facenet_adversarial_generate.execute_attack(fp, app.config['RES_FOLDER'], first_amp, second_amp)
+    return new_path_orig.replace('./static/', ''), new_path_ulixes_first.replace('./static/', ''), new_path_ulixes_second.replace('./static/', '')
 
 
 def allowed_file(filename):
@@ -81,21 +76,11 @@ def upload_image():
 
 
 @app.route('/download', methods=['POST'])
-def download():  # sends to the user the pic he wish to download
+def download():
     for key in request.form:
-        try:
-            privacy_lvl, dot, path = key.partition('.')
-            path = path[1:].replace('static/users_adversarial_examples/', '')
-            privacy_lvl = privacy_lvl.split("_")[1]
-            statistic_dic[privacy_lvl] += 1
-            user_ip = str(request.remote_addr)
-            if md5(user_ip.encode('utf-8')).hexdigest() in path:
-                print(f'[{datetime.now().replace(microsecond=0)}]', "Client IP:", user_ip, "Request download:", privacy_lvl)
-                return send_from_directory(app.config['RES_FOLDER'], path, as_attachment=True)
-            else:
-                abort(404)
-        except:
-            abort(404)
+        if key in statistic_dic:
+            statistic_dic[key] += 1
+    return '', 204
 
 
 def db_update_func():  # updates db for download button statistics
@@ -110,7 +95,7 @@ def db_update_func():  # updates db for download button statistics
             for key in statistic_dic:
                 statistic_dic[key] = 0
 
-            #for row in cursor.execute("select * from statistic"):
+            # for row in cursor.execute("select * from statistic"):
             #   print(row)
 
 

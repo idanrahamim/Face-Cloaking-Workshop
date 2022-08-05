@@ -1,5 +1,5 @@
 
-function init() {
+function init_index() {
     let submitted_flag = false;
     const ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif'];
     const btn = document.querySelector("#btn");
@@ -50,4 +50,26 @@ function init() {
     })
 }
 
-init()
+function init_submission(){
+    btns_flag = [false, false, false];
+    const form = document.querySelector('#form');
+    document.querySelectorAll('input').forEach(btn => {
+     btn.addEventListener("click", (event) => {
+        event.preventDefault();
+        const img = document.querySelector("#img"+btn.id).src;
+        document.body.insertAdjacentHTML('beforeend', `<a id="lin" href="${img}" download="${btn.name}"></a>`);
+        const lin = document.querySelector('#lin');
+        lin.click();
+        lin.remove();
+        if(btns_flag[btn.id-1] === false){
+            btns_flag[btn.id-1] = true;
+            form.requestSubmit(btn);
+        }
+     });
+    });
+}
+
+if(document.title == 'Face Cloaking'){
+    init_index();}
+else{
+    init_submission();}
