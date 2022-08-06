@@ -23,6 +23,11 @@ if os.path.exists(output_directory):
     shutil.rmtree(output_directory)
 os.mkdir(output_directory)
 
+working_directory = './MYWORKINGDIRS'
+if os.path.exists(working_directory):
+    shutil.rmtree(working_directory)
+os.mkdir(working_directory)
+
 face_detector = MTCNN(image_size=240, margin=0, min_face_size=20)
 face_embedding = InceptionResnetV1(pretrained='vggface2').eval()
 face_embedding_vgg = InceptionResnetV1(pretrained='vggface2').eval()
@@ -204,16 +209,20 @@ def execute_attack(input_image, out_dir, first_amp=4.2, second_amp=6.):
     :param second_amp: second image amplification factor
     :return: 3 paths, original_image, attack 1 output image, attack 2 output image
     """
-    if os.path.exists('./MYWORKINGDIR'):
-        shutil.rmtree('./MYWORKINGDIR')
-    os.mkdir('./MYWORKINGDIR')
-    os.mkdir('./MYWORKINGDIR/INPUT_IMAGE')
-    output_mid = './MYWORKINGDIR/INPUT_IMAGE/out'
+    random_str = os.urandom(7).hex()
+    process_dir = 'MYWORKINGDIR_' + random_str
+    process_working_dir = os.path.join(working_directory, process_dir)
+    if os.path.exists(process_working_dir):
+        shutil.rmtree(process_working_dir)
+    os.mkdir(process_working_dir)
+    input_work_dir = os.path.join(process_working_dir, 'INPUT_IMAGE')
+    os.mkdir(input_work_dir)
+    output_mid = os.path.join(input_work_dir, 'out')
     os.mkdir(output_mid)
-    shutil.copy2(input_image, './MYWORKINGDIR/INPUT_IMAGE')
+    shutil.copy2(input_image, input_work_dir)
 
     # The first attack
-    users_images = datasets.ImageFolder('./MYWORKINGDIR')
+    users_images = datasets.ImageFolder(process_working_dir)
     attack = attacks.PGD(face_embedding_vgg, _ulixes_loss,
                          parameters={'epsilon': 0.03, 'steps': 10, 'alpha': 0.005},
                          face_detector=face_detector, amplification=first_amp)

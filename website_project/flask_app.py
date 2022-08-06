@@ -60,7 +60,7 @@ def upload_image():
         return redirect(request.url)
     if file and allowed_file(file.filename):
         filename = md5(str(request.remote_addr).encode('utf-8')).hexdigest() \
-                   + secure_filename(file.filename)
+                   + '_' + os.urandom(7).hex() + '_' + secure_filename(file.filename)
         fp = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(fp)
         original_fp, first_ulixes_fp, second_ulixes_fp = apply_adversarial_example(fp,
@@ -77,6 +77,11 @@ def upload_image():
 
 @app.route('/download', methods=['POST'])
 def download():
+    """
+    this endpoint runs when user clicks on download button.
+    it adds +1 to statistic_dic in the privacy level key of the pic the user downloaded.
+    it runs at most once for each displayed privacy level (per cloaking process).
+    """
     for key in request.form:
         if key in statistic_dic:
             statistic_dic[key] += 1
@@ -84,6 +89,9 @@ def download():
 
 
 def db_update_func():  # updates db for download button statistics
+    """
+    this function updates db for download button statistics if chose by the scheduler
+    """
     for val in statistic_dic.values():
         if val != 0:
             connection = sqlite3.connect("./statistic.db")
@@ -99,7 +107,10 @@ def db_update_func():  # updates db for download button statistics
             #   print(row)
 
 
-def txt_update_func():  # updates txt file for download button statistics
+def txt_update_func():
+    """
+    this function updates txt file for download button statistics if chose by the scheduler
+    """
     for val in statistic_dic.values():
         if val != 0:
             with open("./statistics.txt", "r+") as f:
