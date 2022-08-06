@@ -40,6 +40,14 @@ def home():
 
 @app.route('/', methods=['POST'])
 def upload_image():
+    """
+    this view runs when user uploads an image and clicks on submit.
+    firstly it validates inputs (image file and privacy levels the user selected).
+    then, it receives the cloaked images from apply_adversarial_example function
+    and renders submission.html with arguments:
+        the result images (original, first privacy level cloaked, second privacy level cloaked),
+         the privacy levels and their attack success percents.
+    """
     if 'first_privacy' not in request.form or 'second_privacy' not in request.form:
         flash('Privacy level missed')
         return redirect(request.url)
@@ -78,7 +86,7 @@ def upload_image():
 @app.route('/download', methods=['POST'])
 def download():
     """
-    this endpoint runs when user clicks on download button.
+    this view runs when user clicks on download button.
     it adds +1 to statistic_dic in the privacy level key of the pic the user downloaded.
     it runs at most once for each displayed privacy level (per cloaking process).
     """
