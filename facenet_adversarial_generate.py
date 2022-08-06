@@ -139,7 +139,7 @@ def parameters_experiment():
                                                      parameters={'epsilon': epsilon, 'steps': iterations,
                                                                  'alpha': alpha},
                                                      face_detector=face_detector, amplification=amplification)
-                                attack.test_attack(users_images,
+                                attack.apply_attack(users_images,
                                                    device=device)
                                 e = time.time()
 
@@ -175,7 +175,7 @@ def simple_run(face_embedding_net=face_embedding_vgg):
     attack = attacks.PGD(face_embedding_net, _ulixes_loss,
                          parameters={'epsilon': 0.05, 'steps': 20, 'alpha': 0.005},
                          face_detector=face_detector, amplification=1.)
-    attack.test_attack(users_images,
+    attack.apply_attack(users_images,
                        device=device)
 
     face_recognition_users_images_folder = './GYM_MEMBERS2'
@@ -226,7 +226,7 @@ def execute_attack(input_image, out_dir, first_amp=4.2, second_amp=6.):
     attack = attacks.PGD(face_embedding_vgg, _ulixes_loss,
                          parameters={'epsilon': 0.03, 'steps': 10, 'alpha': 0.005},
                          face_detector=face_detector, amplification=first_amp)
-    attack.test_attack(users_images,
+    attack.apply_attack(users_images,
                        device=device,
                        output_dir=output_mid)
     new_path = os.path.join(output_mid, 'first_' + os.path.basename(input_image))
@@ -241,7 +241,7 @@ def execute_attack(input_image, out_dir, first_amp=4.2, second_amp=6.):
                          parameters={'epsilon': 0.03, 'steps': 10, 'alpha': 0.005},
                          face_detector=face_detector, amplification=second_amp)
 
-    attack.test_attack(users_images,
+    attack.apply_attack(users_images,
                        device=device,
                        output_dir=output_mid)
 

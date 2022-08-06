@@ -17,12 +17,22 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
-statistic_dic = {'Original': 0, 'Low': 0, 'Medium': 0, 'High': 0}
-privacy_lvl_to_success_percent = {'Low': '20%', 'Medium': '50%', 'High': '80%'}
-privacy_lvl_to_amplification = {'Low': 3.2, 'Medium': 4.2, 'High': 6.}
+statistic_dic = {'Original': 0, 'Low': 0, 'Medium': 0, 'High': 0}  # statistics of download button clicks for
+# each image privacy level
+privacy_lvl_to_success_percent = {'Low': '20%', 'Medium': '50%', 'High': '80%'}  # maps from privacy_lvl to
+# attack success_percent
+privacy_lvl_to_amplification = {'Low': 3.2, 'Medium': 4.2, 'High': 6.} # maps from privacy_lvl to
+# amplification needed according to user study figure 9.
 
 
 def apply_adversarial_example(fp, first_amp, second_amp):
+    """
+    this function calls execute_attack, receives original and cloaked images paths and returns them.
+    :param fp: path to the original image the user uploaded.
+    :param first_amp: first amplification needed for the first privacy level the user selected.
+    :param second_amp: second amplification needed for the second privacy level the user selected.
+    :return: paths to original and cloaked images
+    """
     new_path_orig, new_path_ulixes_first, new_path_ulixes_second =\
         facenet_adversarial_generate.execute_attack(fp, app.config['RES_FOLDER'], first_amp, second_amp)
     return new_path_orig.replace('./static/', ''), new_path_ulixes_first.replace('./static/', ''), new_path_ulixes_second.replace('./static/', '')
@@ -43,8 +53,8 @@ def upload_image():
     """
     this view runs when user uploads an image and clicks on submit.
     firstly it validates inputs (image file and privacy levels the user selected).
-    then, it receives the cloaked images from apply_adversarial_example function
-    and renders submission.html with arguments:
+    then, it calls apply_adversarial_example function with the amplifications needed for
+    the selected privacy levels and receives the cloaked images. then, renders submission.html with arguments:
         the result images (original, first privacy level cloaked, second privacy level cloaked),
          the privacy levels and their attack success percents.
     """
@@ -73,8 +83,8 @@ def upload_image():
         file.save(fp)
         original_fp, first_ulixes_fp, second_ulixes_fp = apply_adversarial_example(fp,
             privacy_lvl_to_amplification[first_privacy_lvl], privacy_lvl_to_amplification[second_privacy_lvl])
-        return render_template("/submission.html", original_image=original_fp, a45_image=first_ulixes_fp,
-                               a20_image=second_ulixes_fp,
+        return render_template("/submission.html", original_image=original_fp, first_cloaked_image=first_ulixes_fp,
+                               second_cloaked_image=second_ulixes_fp,
                                first_privacy_lvl=first_privacy_lvl, second_privacy_lvl=second_privacy_lvl,
                                first_success_percent=privacy_lvl_to_success_percent[first_privacy_lvl],
                                second_success_percent=privacy_lvl_to_success_percent[second_privacy_lvl])
@@ -88,7 +98,7 @@ def download():
     """
     this view runs when user clicks on download button.
     it adds +1 to statistic_dic in the privacy level key of the pic the user downloaded.
-    it runs at most once for each displayed privacy level (per cloaking process).
+    js handling it runs at most once for each displayed privacy (per cloaking process).
     """
     for key in request.form:
         if key in statistic_dic:
@@ -135,7 +145,7 @@ def txt_update_func():
 
 
 if __name__ == "__main__":
-    scheduler = BackgroundScheduler()
+    scheduler = BackgroundScheduler()  # scheduler for button statistic information database update
     scheduler.add_job(func=db_update_func, trigger="interval", seconds=2)  # can chose managing db or txt file for
     # download button statistics
     scheduler.start()

@@ -26,7 +26,7 @@ class Attack:
         """
         pass
 
-    def test_attack(self, dataloader,
+    def apply_attack(self, dataloader,
                     device=None, output_dir='./out'):
         """
         This function is responsible to generate the adversarial pertuabtions

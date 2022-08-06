@@ -1,3 +1,10 @@
+
+<!--
+results page.
+original and cloaked images are displayed to the user, with download buttons.
+form is used for sending download button clicks information to the server.
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,29 +15,32 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
     <link rel="stylesheet" href="{{url_for('static',filename='style.css')}}">
-    <script src="{{ url_for('static',filename='script.js') }}" defer></script>
+    <script src="{{ url_for('static',filename='script.js') }}" defer></script> <!--onloads js -->
 </head>
 
 <body>
 <h1>Cloaking Result</h1>
 <div class="row">
-    <form id="form" method="post" action="{{ url_for('download') }}" enctype="multipart/form-data"></form>
+    <form id="form" method="post" action="{{ url_for('download') }}" enctype="multipart/form-data"></form> <!-- form
+     for sending download button clicks information, javascript enforces it to run at most
+      once for each displayed privacy level. -->
 
     <div class="col-lg mb-5">
         <h3>Original Image</h3>
         <img id="img1" src="{{ url_for('static', filename=original_image) }}" alt="Original">
-        <div><input id="1" type="submit" form="form" name="Original" value="Download" class="btn btn-info"></div>
+        <div><input id="1" type="submit" form="form" name="Original" value="Download" class="btn btn-info"></div> <!--
+        download image button, javascript takes care of user-side download. same above -->
     </div>
 
     <div class="col-lg mb-5">
         <h3>{{ first_privacy_lvl }} Privacy - {{first_success_percent}} success</h3>
-        <img id="img2" src="{{ url_for('static', filename=a45_image) }}" alt="Medium Cloak">
+        <img id="img2" src="{{ url_for('static', filename=first_cloaked_image) }}" alt="Medium Cloak">
         <div><input id="2" type="submit" form="form" name="{{ first_privacy_lvl }}" value="Download" class="btn btn-info"></div>
     </div>
 
     <div class="col-lg mb-5">
         <h3>{{ second_privacy_lvl }} Privacy - {{second_success_percent}} success</h3>
-        <img id="img3" src="{{ url_for('static', filename=a20_image) }}" alt="High Cloak">
+        <img id="img3" src="{{ url_for('static', filename=second_cloaked_image) }}" alt="High Cloak">
         <div><input id="3" type="submit" form="form" name="{{ second_privacy_lvl }}" value="Download" class="btn btn-info"></div>
     </div>
 
