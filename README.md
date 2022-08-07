@@ -1,6 +1,6 @@
 # Face-Cloaking-Workshop
 
-Workshop on usable security and privacy, under the supervision of Dr. Mahmood Sharif at Tel-Aviv University
+Workshop on usable security and privacy, under the supervision of Dr. Mahmood Sharif at Tel-Aviv University.
 
 ### How to run the project
 
@@ -14,7 +14,7 @@ as described in detail in our report.
 1. install the requirements.txt file: ```pip install -r requirements.txt```
 2. create a database by running ```python ./website_project/dbs_create.py```
 3. execute the flask app with: ```python ./website_project/flask_app.py```
-4. to open the website, run a browser and type localhost in address bar. 
+4. to open the website, run a browser and type localhost in the address bar. 
 
 The rest of the code is the code we used for research and creating the report. To reproduce the presented
 results follow the documentation of the file ```facenet_adversarial_generate.py```.
