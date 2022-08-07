@@ -21,7 +21,7 @@ statistic_dic = {'Original': 0, 'Low': 0, 'Medium': 0, 'High': 0}  # statistics 
 # each image privacy level
 privacy_lvl_to_success_percent = {'Low': '20%', 'Medium': '50%', 'High': '80%'}  # maps from privacy_lvl to
 # attack success_percent
-privacy_lvl_to_amplification = {'Low': 3.2, 'Medium': 4.2, 'High': 6.} # maps from privacy_lvl to
+privacy_lvl_to_amplification = {'Low': 3.2, 'Medium': 4.2, 'High': 6.}  # maps from privacy_lvl to
 # amplification needed according to user study figure 9.
 
 

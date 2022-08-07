@@ -140,7 +140,7 @@ def parameters_experiment():
                                                                  'alpha': alpha},
                                                      face_detector=face_detector, amplification=amplification)
                                 attack.apply_attack(users_images,
-                                                   device=device)
+                                                    device=device)
                                 e = time.time()
 
                                 cloaked_images = datasets.ImageFolder(output_directory)
@@ -148,7 +148,8 @@ def parameters_experiment():
                                 acc_fake = 1. - _evaluate_algorithm(cloaked_images, face_recognition_sys)
                                 acc_real = 1. - _evaluate_algorithm(users_images, face_recognition_sys)
                                 out_report_file.write(
-                                    f"\n{gym_size},{attack_loss_name},{wb},{amplification},{iterations},{epsilon},{alpha},{acc_fake},{acc_real},{e - s}")
+                                    f"\n{gym_size},{attack_loss_name},{wb},{amplification},{iterations},{epsilon},"
+                                    f"{alpha},{acc_fake},{acc_real},{e - s}")
                                 out_report_file.flush()
 
                                 # shutil.copytree('./out/Abradley_cooper', f'./OUT_FOR_RESULTS/Abradley_cooper_{a}')
@@ -176,7 +177,7 @@ def simple_run(face_embedding_net=face_embedding_vgg):
                          parameters={'epsilon': 0.05, 'steps': 20, 'alpha': 0.005},
                          face_detector=face_detector, amplification=1.)
     attack.apply_attack(users_images,
-                       device=device)
+                        device=device)
 
     face_recognition_users_images_folder = './GYM_MEMBERS2'
 
@@ -227,8 +228,8 @@ def execute_attack(input_image, out_dir, first_amp=4.2, second_amp=6.):
                          parameters={'epsilon': 0.03, 'steps': 10, 'alpha': 0.005},
                          face_detector=face_detector, amplification=first_amp)
     attack.apply_attack(users_images,
-                       device=device,
-                       output_dir=output_mid)
+                        device=device,
+                        output_dir=output_mid)
     new_path = os.path.join(output_mid, 'first_' + os.path.basename(input_image))
     os.rename(os.path.join(output_mid, 'INPUT_IMAGE', '0.png'), new_path)
     shutil.copy2(new_path, out_dir)
@@ -242,8 +243,8 @@ def execute_attack(input_image, out_dir, first_amp=4.2, second_amp=6.):
                          face_detector=face_detector, amplification=second_amp)
 
     attack.apply_attack(users_images,
-                       device=device,
-                       output_dir=output_mid)
+                        device=device,
+                        output_dir=output_mid)
 
     new_ulixes_path = os.path.join(output_mid, 'second_' + os.path.basename(input_image))
     os.rename(os.path.join(output_mid, 'INPUT_IMAGE', '0.png'), new_ulixes_path)
