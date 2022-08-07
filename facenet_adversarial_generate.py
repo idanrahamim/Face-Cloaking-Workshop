@@ -256,5 +256,5 @@ def execute_attack(input_image, out_dir, first_amp=4.2, second_amp=6.):
     os.rename(input_image, to_original_path)
 
     return os.path.join(out_dir, os.path.basename(new_path).replace('first', 'original')), \
-           os.path.join(out_dir, os.path.basename(new_path)), \
-           os.path.join(out_dir, os.path.basename(new_ulixes_path))
+        os.path.join(out_dir, os.path.basename(new_path)), \
+        os.path.join(out_dir, os.path.basename(new_ulixes_path))

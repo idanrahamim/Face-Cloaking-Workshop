@@ -27,7 +27,7 @@ class Attack:
         pass
 
     def apply_attack(self, dataloader,
-                    device=None, output_dir='./out'):
+                     device=None, output_dir='./out'):
         """
         This function is responsible to generate the adversarial pertuabtions
         :param dataloader: the input images as a pytorch Dataloader.
@@ -103,7 +103,7 @@ class PGD(Attack):
                 X.grad.zero_()
             diff = torch.clamp(X - original_X, min=-self.epsilon, max=self.epsilon)  # gradient projection
             X = torch.clamp(original_X + diff, min=-1.0,
-                            max=1.0).detach_()  # to stay in image range [0,1] #TODO: check detach_ why _
+                            max=1.0).detach_()  # to stay in image range [0,1]
 
             # print(_loss.item())
 
