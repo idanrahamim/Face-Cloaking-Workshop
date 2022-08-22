@@ -7,7 +7,6 @@ import torch
 from torchvision import datasets
 from torch.utils.data import DataLoader
 from PIL import Image
-import numpy as np
 
 
 # face_detector = MTCNN(image_size=240, margin=0, min_face_size=20)
