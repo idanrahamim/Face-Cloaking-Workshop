@@ -13,9 +13,10 @@ as described in detail in our report.
 0. Download and install Python 3.10.6
 1. Clone the repository and ```cd``` to the project folder.
 2. Install the requirements.txt file: ```pip install -r requirements.txt```
-3. Create a database by running ```python ./website_project/dbs_create.py```
-4. Execute the flask app with: ```python ./website_project/flask_app.py```
-5. To open the website, run a browser and type localhost in the address bar. 
-
+3. ```cd``` to the website_project folder.
+4. Create a database by running ```python dbs_create.py```
+5. Execute the flask app with: ```python flask_app.py```
+6. To open the website, run a browser and type localhost in the address bar. 
+7. To check download button statistics run: ```python dbs_check_stat.py```
 The rest of the code is the code we used for research and creating the report. To reproduce the presented
 results follow the documentation of the file ```facenet_adversarial_generate.py```.

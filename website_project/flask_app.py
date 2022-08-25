@@ -1,12 +1,14 @@
-import facenet_adversarial_generate
+import os
+import sys
 import sqlite3
 from flask import Flask, flash, request, redirect, render_template
-import os
 from werkzeug.utils import secure_filename
 from waitress import serve
 from apscheduler.schedulers.background import BackgroundScheduler
 from hashlib import md5
 from datetime import datetime
+sys.path.insert(1, os.path.join(sys.path[0], '..'))
+import facenet_adversarial_generate
 
 app = Flask(__name__)
 SECRET_KEY = os.urandom(12).hex()
