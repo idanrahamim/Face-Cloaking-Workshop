@@ -10,7 +10,7 @@ as described in detail in our report.
 
 #### To run the website server you should:
 
-0. Download and install Python 3.10.6
+0. Download and install Python 3.8 - 3.10 (we used 3.10.6)
 1. Clone the repository and ```cd``` to the project folder.
 2. Install the requirements.txt file: ```pip install -r requirements.txt```
 3. ```cd``` to the website_project folder.
