@@ -99,8 +99,8 @@ class PGD(Attack):
             _loss.backward()
 
             X = X - self.alpha * X.grad.sign()
-            if X.grad is not None:
-                X.grad.zero_()
+            if X.retain_grad() is not None:
+                X.retain_grad().zero_()
             diff = torch.clamp(X - original_X, min=-self.epsilon, max=self.epsilon)  # gradient projection
             X = torch.clamp(original_X + diff, min=-1.0,
                             max=1.0).detach_()  # to stay in image range [0,1]
