@@ -18,5 +18,6 @@ as described in detail in our report.
 5. Execute the flask app with: ```python flask_app.py```
 6. To open the website, run a browser and type localhost in the address bar. 
 7. To check download button statistics run: ```python dbs_check_stat.py```
+
 The rest of the code is the code we used for research and creating the report. To reproduce the presented
 results follow the documentation of the file ```facenet_adversarial_generate.py```.
