@@ -8,7 +8,7 @@ The final product of this project is a website where the user can upload an imag
 image with adversarial examples, that would with certainly presented probability fools real-world face recognition systems,
 as described in detail in our report.
 
-* The server and the website were checked on Windows, MacOS and Linux operation systems,
+- The server and the website were checked on Windows, MacOS and Linux operation systems,
 and on Chrome, Safari, Firefox, Microsoft edge and Opera browsers.
 
 #### To run the website server you should:
