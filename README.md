@@ -9,7 +9,7 @@ image with adversarial examples, that would with certainly presented probability
 as described in detail in our report.
 
 * The server and the website were checked on Windows, MacOS and Linux operation systems,
-* and on Chrome, Safari, Firefox, Microsoft edge and Opera browsers.
+and on Chrome, Safari, Firefox, Microsoft edge and Opera browsers.
 
 #### To run the website server you should:
 
