@@ -8,9 +8,12 @@ The final product of this project is a website where the user can upload an imag
 image with adversarial examples, that would with certainly presented probability fools real-world face recognition systems,
 as described in detail in our report.
 
+* The server and the website were checked on Windows, MacOS and Linux operation systems,
+* and on Chrome, Safari, Firefox, Microsoft edge and Opera browsers.
+
 #### To run the website server you should:
 
-0. Download and install Python 3.8-3.10 (we used 3.10.6)
+0. Download and install Python 3.8-3.10 (we used 3.10.6).
 1. Clone the repository and ```cd``` to the project folder.
 2. Install the requirements.txt file: ```pip install -r requirements.txt```
 3. ```cd``` to the website_project folder.
