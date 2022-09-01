@@ -83,8 +83,12 @@ def upload_image():
                    + '_' + os.urandom(7).hex() + '_' + secure_filename(file.filename)
         fp = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(fp)
-        original_fp, first_ulixes_fp, second_ulixes_fp = apply_adversarial_example(fp,
-            privacy_lvl_to_amplification[first_privacy_lvl], privacy_lvl_to_amplification[second_privacy_lvl])
+        try:
+            original_fp, first_ulixes_fp, second_ulixes_fp = apply_adversarial_example(fp,
+                privacy_lvl_to_amplification[first_privacy_lvl], privacy_lvl_to_amplification[second_privacy_lvl])
+        except TypeError:  # No faces detected by the face_detector
+            flash('No face detected, select different image')
+            return redirect(request.url)
         return render_template("/submission.html", original_image=original_fp, first_cloaked_image=first_ulixes_fp,
                                second_cloaked_image=second_ulixes_fp,
                                first_privacy_lvl=first_privacy_lvl, second_privacy_lvl=second_privacy_lvl,
